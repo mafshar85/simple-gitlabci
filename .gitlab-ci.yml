@@ -1,0 +1,7 @@
+run_tests:
+    before_scipt:
+        - echo "preparing test data ..."
+    script:
+        - echo "running test...."
+    after_script:
+        - echo "clean up temporary files..."
