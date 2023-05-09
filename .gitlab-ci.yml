@@ -1,5 +1,5 @@
 run_tests:
-    before_scipt:
+    before_script:
         - echo "preparing test data ..."
     script:
         - echo "running test...."
