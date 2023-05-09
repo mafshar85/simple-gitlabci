@@ -1,4 +1,7 @@
 run_tests:
+    tags:
+        - kvm
+        - docker
     before_script:
         - echo "preparing test data ..."
     script:
