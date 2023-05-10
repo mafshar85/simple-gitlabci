@@ -16,7 +16,7 @@ run_tests:
     - kvm
     - docker
   stage: test
-  except:
+  only:
     - master
   before_script:
     - echo "preparing test data ..."
