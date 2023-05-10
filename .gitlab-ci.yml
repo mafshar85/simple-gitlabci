@@ -1,6 +1,6 @@
 workflow:
   rules:
-    - if: $CI_COMMIT_BRANCH != "master"
+    - if: $CI_COMMIT_BRANCH != "master" && CI_PIPELINE_SOURCE != "merge_request_event"
       when: never
     - when: always
 
@@ -15,6 +15,8 @@ run_tests:
     - kvm
     - docker
   stage: test
+  except:
+    - main
   before_script:
     - echo "preparing test data ..."
   script:
