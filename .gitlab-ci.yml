@@ -1,7 +1,12 @@
+stages:
+  - test
+  - build
+
 run_tests:
     tags:
-        - kvm
-        - docker
+      - kvm
+      - docker
+    stage: test
     before_script:
         - echo "preparing test data ..."
     script:
