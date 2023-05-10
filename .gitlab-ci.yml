@@ -43,7 +43,7 @@ push_image:
     - echo "push stage"
 
 
-deploy:
+deploy_image:
   tags:
     - shell-exec
   stage:
