@@ -3,13 +3,35 @@ stages:
   - build
 
 run_tests:
-    tags:
-      - kvm
-      - docker
-    stage: test
-    before_script:
-        - echo "preparing test data ..."
-    script:
-        - echo "running test...."
-    after_script:
-        - echo "clean up temporary files..."
+  tags:
+    - kvm
+    - docker
+  stage: test
+  before_script:
+    - echo "preparing test data ..."
+  script:
+    - echo "running test...."
+  after_script:
+    - echo "clean up temporary files..."
+
+
+build_image:
+  tags:
+    - kvm
+    - docker
+  stage: build
+  image: alpine
+  script:
+    - echo "building state"
+    - sleep 20
+
+push_image:
+  tags:
+    - kvm
+    - docker
+  stage: build
+  needs:
+    - build_image
+  image: alpine
+  script:
+    - echo "push stage"
