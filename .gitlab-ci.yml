@@ -9,6 +9,7 @@ stages:
   - build
   - deploy
 
+image: node:20-alpine
 
 run_tests:
   tags:
@@ -19,6 +20,7 @@ run_tests:
     - master
   before_script:
     - echo "preparing test data ..."
+    - npm version
   script:
     - echo "running test...."
   after_script:
