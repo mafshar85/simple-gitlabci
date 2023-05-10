@@ -16,7 +16,7 @@ run_tests:
     - docker
   stage: test
   except:
-    - main
+    - master
   before_script:
     - echo "preparing test data ..."
   script:
