@@ -1,6 +1,14 @@
+workflow:
+  rules:
+    - if $CI_COMMIT_BRANCH != "main"
+      when: never
+    - when: always
+
 stages:
   - test
   - build
+  - deploy
+
 
 run_tests:
   tags:
@@ -17,21 +25,28 @@ run_tests:
 
 build_image:
   tags:
-    - kvm
-    - docker
+    - shell-exec
   stage: build
-  image: alpine
+  #image: alpine
   script:
     - echo "building state"
     - sleep 20
 
 push_image:
   tags:
-    - kvm
-    - docker
+    - shell-exec
   stage: build
   needs:
     - build_image
-  image: alpine
+  #image: alpine
   script:
     - echo "push stage"
+
+
+deploy:
+  tags:
+    - shell-exec
+  stage:
+    - deploy
+  script:
+    - echo "deploying in deploy stage"
