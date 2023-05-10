@@ -1,9 +1,9 @@
 workflow:
   rules:
-    - if: $CI_COMMIT_BRANCH != "main"
+    - if: $CI_COMMIT_BRANCH != "master"
       when: never
     - when: always
-  
+
 stages:
   - test
   - build
