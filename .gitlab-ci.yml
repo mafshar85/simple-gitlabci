@@ -43,10 +43,10 @@ push_image:
     - echo "push stage"
 
 
-deploy_image:
-  tags:
-    - shell-exec
-  stage:
-    - deploy
-  script:
-    - echo "deploying in deploy stage"
+# deploy_image:
+#   tags:
+#     - shell-exec
+#   stage:
+#     - deploy
+#   script:
+#     - echo "deploying in deploy stage"
