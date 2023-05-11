@@ -9,8 +9,6 @@ stages:
   - build
   - deploy
 
-variables:
-  $CI_REGISTRY_IMAGE: mafshar85/nodejs-cicd
 
 image: node:20-alpine
 
@@ -63,7 +61,8 @@ push_image:
     - echo "Docker image repo is $CI_REGISTRY_IMAGE"
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
   script:
-    - docker push $CI_REGISTRY_IMAGE:v1.0
+    # - docker push $CI_REGISTRY_IMAGE:v1.0
+    - docker push mafshar85/$CI_REGISTRY_IMAGE:v1.0
 
 
 deploy_image: 
