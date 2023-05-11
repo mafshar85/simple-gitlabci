@@ -1,5 +1,7 @@
 const path = require( 'path');
-const fs = require(' fs' )
+// const fs = require(' fs' )
+const fs = eval('require("fs")')
+
 
 test('main index.html file exists', () => {
   const filePath = path.join(--dirname, "index.html") 
