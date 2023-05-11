@@ -23,6 +23,10 @@ run_unit_tests:
     - npm install
   script:
     - npm test
+  artifacts:
+    when: always
+    reposrts:
+      junit: app/junit.xml
   
 
 build_image:
