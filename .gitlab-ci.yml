@@ -11,21 +11,19 @@ stages:
 
 image: node:20-alpine
 
-run_tests:
+run_unit_tests:
   tags:
     - kvm
     - docker
   stage: test
-  only:
-    - master
+  # only:
+  #   - master
   before_script:
-    - echo "preparing test data ..."
-    - npm version
+    - cd app
+    - npm install
   script:
-    - echo "running test...."
-  after_script:
-    - echo "clean up temporary files..."
-
+    - npm test
+  
 
 build_image:
   tags:
@@ -34,7 +32,7 @@ build_image:
   #image: alpine
   script:
     - echo "building state"
-    - sleep 20
+    - sleep 1
 
 push_image:
   tags:
