@@ -9,6 +9,9 @@ stages:
   - build
   - deploy
 
+variables:
+  $CI_REGISTRY_IMAGE: mafshar85/nodejs-cicd
+
 image: node:20-alpine
 
 run_unit_tests:
@@ -37,6 +40,8 @@ build_image:
   tags:
     - shell-exec
   stage: build
+  except:
+    - master
   #image: node:20-alpine
   script:
     - docker build -t $CI_REGISTRY_IMAGE:v1.0 .
@@ -48,6 +53,10 @@ push_image:
   needs:
     - build_image
   #image: node:20-alpine
+  variables:
+     CI_REGISTRY: index.docker.io
+     CI_REGISTRY_USER: mafshar85
+    #CI_REGISTRY_PASSWORD: xxxx
   before_script:
     - echo "Docker registry url is $CI_REGISTRY"
     - echo "Docker registry user is $CI_REGISTRY_USER"
