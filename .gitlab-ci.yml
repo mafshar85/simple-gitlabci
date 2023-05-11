@@ -9,6 +9,9 @@ stages:
   - build
   - deploy
 
+variables:
+  CI_REGISTRY_IMAGE: nodejs-cicd
+
 
 image: node:20-alpine
 
