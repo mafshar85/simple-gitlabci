@@ -18,6 +18,8 @@ run_unit_tests:
   stage: test
   # only:
   #   - master
+  except:
+    - master
   before_script:
     - cd app
     - npm install
@@ -29,16 +31,15 @@ run_unit_tests:
       - app/junit.xml
     reports:
       junit: app/junit.xml
-  
+  #allow_failure: "true"  
 
 build_image:
   tags:
     - shell-exec
   stage: build
-  #image: alpine
+  #image: node:20-alpine
   script:
-    - echo "building state"
-    - sleep 1
+    - docker build -t $CI_REGISTRY_IMAGE:v1.0 .
 
 push_image:
   tags:
@@ -46,9 +47,14 @@ push_image:
   stage: build
   needs:
     - build_image
-  #image: alpine
+  #image: node:20-alpine
+  before_script:
+    - echo "Docker registry url is $CI_REGISTRY"
+    - echo "Docker registry user is $CI_REGISTRY_USER"
+    - echo "Docker image repo is $CI_REGISTRY_IMAGE"
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
   script:
-    - echo "push stage"
+    - docker push $CI_REGISTRY_IMAGE:v1.0
 
 
 deploy_image: 
