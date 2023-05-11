@@ -50,8 +50,8 @@ push_image:
   tags:
     - shell-exec
   stage: build
-  needs:
-    - build_image
+  # needs:
+  #   - build_image
   #image: node:20-alpine
   variables:
      CI_REGISTRY: index.docker.io
