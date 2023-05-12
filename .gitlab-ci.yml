@@ -66,7 +66,7 @@ push_image:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
   script:
     # - docker push $CI_REGISTRY_IMAGE:v1.0
-    - docker push $IMAGE_NAME:$TAG_NAME 
+    - docker push $IMAGE_NAME:$IMAGE_TAG 
 
 
 deploy_to_dev: 
@@ -85,7 +85,7 @@ deploy_to_dev:
     - ssh -o StrictHostKeyChecking=no -i $SSH_PRIVATE_KEY $DEV_HOST "
 
          export DC_IMAGE_NAME=$IMAGE_NAME && 
-         export DC_IMAGE_TAGE=$TAG_NAME  &&
+         export DC_IMAGE_TAG=$IMAGE_TAG  &&
 
          docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY &&
          docker-compose down &&
