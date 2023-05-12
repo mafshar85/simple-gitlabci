@@ -60,18 +60,25 @@ push_image:
      #CI_REGISTRY_USER: xxxx
      #CI_REGISTRY_PASSWORD: xxxx
   before_script:
-    - echo "Docker registry url is $CI_REGISTRY"
-    - echo "Docker registry user is $CI_REGISTRY_USER"
-    - echo "Docker image repo is $CI_REGISTRY_IMAGE"
+    # - echo "Docker registry url is $CI_REGISTRY"
+    # - echo "Docker registry user is $CI_REGISTRY_USER"
+    # - echo "Docker image repo is $CI_REGISTRY_IMAGE"
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
   script:
     # - docker push $CI_REGISTRY_IMAGE:v1.0
     - docker push $IMAGE_NAME:$TAG_NAME 
 
 
-deploy_image: 
+deploy_to_dev: 
   tags: 
     - shell-exec
   stage: deploy
+  variables:
+    DEV_HOST: arye@192.168.1.158
+  before_script:
+    - chmod 400 $SSH_PRIVATE_KEY
   script: 
-    - echo "deploying in deploy stage ..."
+    - ssh -o StrictHostKeyChecking=no -i $SSH_PRIVATE_KEY $DEV_HOST "
+         docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY &&
+         docker run -d -p 3000:3000 $IMAGE_NAME:$TAG_NAME  "
+
