@@ -89,6 +89,7 @@ deploy_to_dev:
     - chmod 400 $SSH_PRIVATE_KEY && stat $SSH_PRIVATE_KEY
     - export VERSION=$(cat version_file)
     # - sleep 10
+  # dependencies: []
   script: 
     - scp -o StrictHostKeyChecking=no -i $SSH_PRIVATE_KEY ./docker-compose.yml arye@$DEV_SERVER_HOST:$DEV_HOST_PATH
     - ssh -o StrictHostKeyChecking=no -i $SSH_PRIVATE_KEY arye@$DEV_SERVER_HOST "
