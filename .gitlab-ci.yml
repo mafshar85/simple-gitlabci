@@ -12,6 +12,9 @@ stages:
 variables:
   CI_REGISTRY: docker.arye.ir
   CI_REGISTRY_IMAGE: nodejs-cicd
+  MICRO_SERVICE: njs_app
+  IMAGE_NAME: $CI_REGISTRY/$CI_REGISTRY_IMAGE/microservice/$MICRO_SERVICE
+  IMAGE_TAG: v1.0
 
 
 image: node:20-alpine
@@ -44,7 +47,7 @@ build_image:
   stage: build
   #image: node:20-alpine
   script:
-    - docker build -t $CI_REGISTRY/$CI_REGISTRY_IMAGE:v1.0 .
+    - docker build -t $IMAGE_NAME:$TAG_NAME .
 
 push_image:
   tags:
@@ -53,7 +56,7 @@ push_image:
   needs:
     - build_image
   #image: node:20-alpine
-  variables:
+  # variables:
      #CI_REGISTRY_USER: xxxx
      #CI_REGISTRY_PASSWORD: xxxx
   before_script:
@@ -63,7 +66,7 @@ push_image:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
   script:
     # - docker push $CI_REGISTRY_IMAGE:v1.0
-    - docker push $CI_REGISTRY/$CI_REGISTRY_IMAGE:v1.0
+    - docker push $IMAGE_NAME:$TAG_NAME 
 
 
 deploy_image: 
