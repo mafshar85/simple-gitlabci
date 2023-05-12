@@ -14,7 +14,7 @@ variables:
   CI_REGISTRY_IMAGE: nodejs-cicd
   MICRO_SERVICE: njs_app
   IMAGE_NAME: $CI_REGISTRY/$CI_REGISTRY_IMAGE/microservice/$MICRO_SERVICE
-  IMAGE_TAG: v1.0
+ # IMAGE_TAG: v1.0
 
 
 image: node:20-alpine
@@ -46,8 +46,15 @@ build_image:
     - shell-exec
   stage: build
   #image: node:20-alpine
+  before_script:
+    - export APP_JSON_VERSION=$(cat app/package.json |jq -r .version)
+    - export VERSION=$APP_JSON_VERSION.$CI_PIPELINE_IID
+    - echo $VERSION > version_file
   script:
-    - docker build -t $IMAGE_NAME:$IMAGE_TAG .
+    - docker build -t $IMAGE_NAME:$VERSION .
+  artifacts:
+    paths:
+      - version_file
 
 push_image:
   tags:
@@ -63,10 +70,11 @@ push_image:
     # - echo "Docker registry url is $CI_REGISTRY"
     # - echo "Docker registry user is $CI_REGISTRY_USER"
     # - echo "Docker image repo is $CI_REGISTRY_IMAGE"
+    - export VERSION=$(cat version_file)
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
   script:
     # - docker push $CI_REGISTRY_IMAGE:v1.0
-    - docker push $IMAGE_NAME:$IMAGE_TAG 
+    - docker push $IMAGE_NAME:$VERSION 
 
 
 deploy_to_dev: 
@@ -79,13 +87,14 @@ deploy_to_dev:
     DEV_ENDPOINT: 192.168.1.158:3000
   before_script:
     - chmod 400 $SSH_PRIVATE_KEY && stat $SSH_PRIVATE_KEY
+    - export VERSION=$(cat version_file)
     # - sleep 10
   script: 
     - scp -o StrictHostKeyChecking=no -i $SSH_PRIVATE_KEY ./docker-compose.yml arye@$DEV_SERVER_HOST:$DEV_HOST_PATH
     - ssh -o StrictHostKeyChecking=no -i $SSH_PRIVATE_KEY arye@$DEV_SERVER_HOST "
 
          export DC_IMAGE_NAME=$IMAGE_NAME && 
-         export DC_IMAGE_TAG=$IMAGE_TAG  &&
+         export DC_IMAGE_TAG=$VERSION  &&
 
          docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY &&
          docker-compose down &&
