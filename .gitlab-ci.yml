@@ -75,10 +75,13 @@ deploy_to_dev:
   stage: deploy
   variables:
     DEV_HOST: arye@192.168.1.158
+    DEV_ENDPOINT: 192.168.1.158:3000
   before_script:
     - chmod 400 $SSH_PRIVATE_KEY
   script: 
     - ssh -o StrictHostKeyChecking=no -i $SSH_PRIVATE_KEY $DEV_HOST "
          docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY &&
          docker run -d -p 3000:3000 $IMAGE_NAME:$TAG_NAME  "
-
+  environment:
+    name: deployment
+    url: $DEV_ENDPOINT
